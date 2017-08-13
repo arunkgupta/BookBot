@@ -5,6 +5,9 @@ Small reddit bot that monitors certain subreddits and when summoned replies with
 Contact me if you want the bot to monitor a subreddit.
 
 ## Usage
+
+Only one command per comment and the command must be in its own line.
+
 - !book Name of book
 - !author Author of book
 
