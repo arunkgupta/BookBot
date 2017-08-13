@@ -5,6 +5,8 @@ import sqlite3
 import praw
 import BeautifulSoup
 import requests
+import re
+
 from datetime import datetime
 
 DEBUG="TRUE"
@@ -21,10 +23,15 @@ CREATE TABLE IF NOT EXISTS comments (
 """
 SQL_SEARCH = """SELECT * FROM comments WHERE comment='{comment_perm}'"""
 SQL_ADD_COMMENT = """INSERT INTO comments(comment, created_at) VALUES ('{comment_perm}', '{now}')"""
+
 # Reddit params
 BOT = praw.Reddit('bookBot')
-SUBREDDIT = BOT.subreddit("testingground4bots")
-NUMBER_OF_POSTS = 25
+SUBREDDIT_LIST = [
+"testingground4bots",
+"chess"
+]
+SUBREDDIT = BOT.subreddit("+".join(SUBREDDIT_LIST))
+NUMBER_OF_POSTS = 100
 CALLSIGN = "!book"
 AUTHOR_CALLSIGN = "!author"
 
@@ -38,7 +45,7 @@ SIGNATURE = """
 """
 
 # goodreads params
-NUMBER_OF_BOOKS = 3
+NUMBER_OF_BOOKS = 1
 NUMBER_OF_BOOKS_AUTHOR = 5
 SEARCH_URL = "https://www.goodreads.com/search?q="
 
@@ -71,14 +78,21 @@ def get_book_info(search_string, n):
                 books_content.append(book_content)
 
         books_info = []
-        # Avoid trying to read more books than exist
+        # Avoid (books_info[-1]["link"]).text trying to read more books than exist
         n = min(n, len(books_content))
         for book_content in books_content[:n]:
             books_info.append({})
             books_info[-1]["title"] = book_content.find("span", {"itemprop" : "name"}).string
             books_info[-1]["author"] = book_content.find("a", { "class" : "authorName" }).span.string
             books_info[-1]["rating"] = book_content.find("span", {"class": "minirating"}).contents[-1][1:5]
-            books_info[-1]["link"] = "https://www.goodreads.com" + book_content.find("a")["href"]
+            books_info[-1]["link"] = "https://www.goodreads.com" + book_content.find("a")["href"] +"&ac=1"
+
+        if n == 1:
+            request_text = requests.get(books_info[-1]["link"]).text
+            soup = BeautifulSoup.BeautifulSoup(request_text)
+            book_html = soup.find("div", {"id":"description"}).span.text
+            re.sub('<[^<]+?>', '', book_html.encode("utf-8"))
+            books_info[0]["description"] = book_html
 
         return(books_info)
     else:
@@ -94,16 +108,15 @@ def build_reply_string(books):
             rating=book["rating"].encode("utf-8"),
             link=book["link"].encode("utf-8")
         )
-
+    if len(books) == 1:
+        reply_text += "\n\n>{}\n\n".format(books[0]["description"].encode("utf-8"))
     reply_text += SIGNATURE
     return(reply_text)
 
 def was_replied(comment):
     rows = CURSOR.execute(SQL_SEARCH.format(comment_perm=comment.permalink()))
-    if rows.fetchall():
-        return True
-    else:
-        return False
+    return bool(rows.fetchall())
+
 
 def main():
 
