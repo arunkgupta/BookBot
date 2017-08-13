@@ -5,8 +5,8 @@ Small reddit bot that monitors certain subreddits and when summoned replies with
 Contact me if you want the bot to monitor a subreddit.
 
 ## Usage
-!book Name of book
-!author Author of book
+- !book Name of book
+- !author Author of book
 
 ## Installation
 
