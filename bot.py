@@ -1,9 +1,11 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import sqlite3
 import praw
 import BeautifulSoup
 import requests
+from datetime import datetime
 
 DEBUG="TRUE"
 
@@ -13,11 +15,12 @@ CURSOR = CONN.cursor()
 SQL_CREATE_TABLE = """
 CREATE TABLE IF NOT EXISTS comments (
     id integer PRIMARY KEY,
-    comment text NOT NULL
+    comment text NOT NULL,
+    created_at TIMESTAMP
 );
 """
 SQL_SEARCH = """SELECT * FROM comments WHERE comment='{comment_perm}'"""
-SQL_ADD_COMMENT = """INSERT INTO comments(comment) VALUES ('{comment_perm}')"""
+SQL_ADD_COMMENT = """INSERT INTO comments(comment, created_at) VALUES ('{comment_perm}', '{now}')"""
 # Reddit params
 BOT = praw.Reddit('bookBot')
 SUBREDDIT = BOT.subreddit("testingground4bots")
@@ -67,6 +70,8 @@ def get_book_info(search_string, n):
                 books_content.append(book_content)
 
         books_info = []
+        # Avoid trying to read more books than exist
+        n = min(n, len(books_content))
         for book_content in books_content[:n]:
             books_info.append({})
             books_info[-1]["title"] = book_content.find("span", {"itemprop" : "name"}).string
@@ -83,10 +88,10 @@ def build_reply_string(books):
     for i, book in enumerate(books):
         reply_text += TEMPLATE_BOOK.format(
             number=i+1,
-            title=book["title"],
-            author=book["author"],
-            rating=book["rating"],
-            link=book["link"]
+            title=book["title"].encode("utf-8"),
+            author=book["author"].encode("utf-8"),
+            rating=book["rating"].encode("utf-8"),
+            link=book["link"].encode("utf-8")
         )
 
     reply_text += SIGNATURE
@@ -132,7 +137,7 @@ def main():
                 print("reply: \n{}".format(reply_string))
 
             # saves to DB
-            CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink()))
+            CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink(), now=datetime.now()))
     CONN.commit()
     CONN.close()
 
