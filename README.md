@@ -32,3 +32,4 @@ If you want to run an instance of this bot:
 
 - Move DB from permalinks to IDs
 - Maybe put it to read /r/all?
+- No description blurb
