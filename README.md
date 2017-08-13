@@ -13,6 +13,8 @@ Only one command per comment and the command must be in its own line.
 
 ## Supported subreddits
 
+Want to add a subreddit? Just message me.
+
 - /r/testingground4bots
 - /r/chess
 - /r/python
