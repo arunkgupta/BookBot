@@ -77,7 +77,7 @@ def get_book_info(search_string, n):
     if '<h3 class="searchSubNavContainer">No results.</h3>' not in request_text:
         soup = BeautifulSoup(request_text, "html.parser")
         books_content = []
-        for book_conten                print("eee")t in soup.findAll("tr"):
+        for book_content in soup.findAll("tr"):
             if book_content["itemtype"] == "http://schema.org/Book":
                 books_content.append(book_content)
 
@@ -101,7 +101,7 @@ def get_book_info(search_string, n):
                 books_info[0]["description"] = book_html
 
         return(books_info)
-    else:                print("eee")
+    else:
         return(False)
 
 def build_reply_string(books):
