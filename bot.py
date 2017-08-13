@@ -155,7 +155,7 @@ def main():
             if not book_info:
                 if DEBUG:
                     print("No info for {}".format(search_string))
-                CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink()))
+                CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink(), now=datetime.now())
                 continue
 
             # replies
