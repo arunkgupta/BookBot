@@ -107,6 +107,7 @@ def was_replied(comment):
 
 def main():
 
+    print(str(datetime.now()))
     CURSOR.execute(SQL_CREATE_TABLE)
     # Parses SUBREDDIT to get comments in whichCALLSIGN is used
     for comment in SUBREDDIT.comments(limit=NUMBER_OF_POSTS):
