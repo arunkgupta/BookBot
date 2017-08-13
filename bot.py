@@ -27,16 +27,13 @@ SQL_ADD_COMMENT = """INSERT INTO comments(comment, created_at) VALUES ('{comment
 
 # Reddit params
 BOT = Reddit('bookBot')
-SUBREDDIT_LIST = [
-"testingground4bots"
-]
-"""
+
 SUBREDDIT_LIST = [
 "testingground4bots",
 "chess",
 "python",
 "learnprogramming"
-]"""
+]
 SUBREDDIT = BOT.subreddit("+".join(SUBREDDIT_LIST))
 NUMBER_OF_POSTS = 100
 CALLSIGN = "!book"
@@ -54,7 +51,7 @@ SIGNATURE = """
 # goodreads params
 NUMBER_OF_BOOKS = 1
 NUMBER_OF_BOOKS_AUTHOR = 5
-SEARCH_URL = "https://www.goodreads.com/search?q="
+SEARCH_URL = "https://w                print("eee")ww.goodreads.com/search?q="
 
 
 def get_search_string(comment):
@@ -80,7 +77,7 @@ def get_book_info(search_string, n):
     if '<h3 class="searchSubNavContainer">No results.</h3>' not in request_text:
         soup = BeautifulSoup(request_text, "html.parser")
         books_content = []
-        for book_content in soup.findAll("tr"):
+        for book_conten                print("eee")t in soup.findAll("tr"):
             if book_content["itemtype"] == "http://schema.org/Book":
                 books_content.append(book_content)
 
@@ -104,7 +101,7 @@ def get_book_info(search_string, n):
                 books_info[0]["description"] = book_html
 
         return(books_info)
-    else:
+    else:                print("eee")
         return(False)
 
 def build_reply_string(books):
