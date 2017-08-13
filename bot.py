@@ -95,6 +95,7 @@ def get_book_info(search_string, n):
             request_text = get(books_info[-1]["link"]).text
             soup = BeautifulSoup(request_text, "html.parser")
             soup = soup.find("div", {"id":"description"})
+            # check that the description exists
             if soup:
                 book_html = soup.findAll("span")[-1].text
                 sub('<[^<]+?>', '', book_html)
