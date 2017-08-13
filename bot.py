@@ -30,7 +30,8 @@ BOT = Reddit('bookBot')
 SUBREDDIT_LIST = [
 "testingground4bots",
 "chess",
-"python"
+"python",
+"learnprogramming"
 ]
 SUBREDDIT = BOT.subreddit("+".join(SUBREDDIT_LIST))
 NUMBER_OF_POSTS = 100
@@ -52,7 +53,7 @@ NUMBER_OF_BOOKS_AUTHOR = 5
 SEARCH_URL = "https://www.goodreads.com/search?q="
 
 
-def get_search_string(comment):
+def get_search_string(c/learnprogrammingomment):
     """
     Returns the string to be searched for in comment
     """
@@ -76,7 +77,7 @@ def get_book_info(search_string, n):
         soup = BeautifulSoup(request_text, "html.parser")
         books_content = []
         for book_content in soup.findAll("tr"):
-            if book_content["itemtype"] == "http://schema.org/Book":
+            if book_con/learnprogrammingtent["itemtype"] == "http://schema.org/Book":
                 books_content.append(book_content)
 
         books_info = []
