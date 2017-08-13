@@ -33,6 +33,7 @@ TEMPLATE_BOOK = """
 {number}. {title} by {author}. ({rating}/5 *) [Link]({link})
 """
 SIGNATURE = """
+***
 ^^I'm ^^a ^^bot, ^^check ^^me ^^out ^^at: ^^https://github.com/RoberTnf/BookBot
 """
 
