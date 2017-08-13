@@ -77,7 +77,7 @@ def get_book_info(search_string, n):
         soup = BeautifulSoup(request_text, "html.parser")
         books_content = []
         for book_content in soup.findAll("tr"):
-            if book_con/learnprogrammingtent["itemtype"] == "http://schema.org/Book":
+            if book_content["itemtype"] == "http://schema.org/Book":
                 books_content.append(book_content)
 
         books_info = []
