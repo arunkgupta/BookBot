@@ -51,7 +51,7 @@ SIGNATURE = """
 # goodreads params
 NUMBER_OF_BOOKS = 1
 NUMBER_OF_BOOKS_AUTHOR = 5
-SEARCH_URL = "https://w                print("eee")ww.goodreads.com/search?q="
+SEARCH_URL = "https://www.goodreads.com/search?q="
 
 
 def get_search_string(comment):
