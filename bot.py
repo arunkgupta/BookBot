@@ -90,7 +90,7 @@ def get_book_info(search_string, n):
         if n == 1:
             request_text = requests.get(books_info[-1]["link"]).text
             soup = BeautifulSoup.BeautifulSoup(request_text)
-            book_html = soup.find("div", {"id":"description"}).span.text
+            book_html = soup.find("div", {"id":"description"}).findAll("span")[-1].text
             re.sub('<[^<]+?>', '', book_html.encode("utf-8"))
             books_info[0]["description"] = book_html
 
