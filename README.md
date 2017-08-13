@@ -31,3 +31,4 @@ If you want to run an instance of this bot:
 ## TODO
 
 - Move DB from permalinks to IDs
+- Maybe put it to read /r/all?
