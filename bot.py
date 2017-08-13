@@ -53,7 +53,7 @@ NUMBER_OF_BOOKS_AUTHOR = 5
 SEARCH_URL = "https://www.goodreads.com/search?q="
 
 
-def get_search_string(c/learnprogrammingomment):
+def get_search_string(comment):
     """
     Returns the string to be searched for in comment
     """
