@@ -11,6 +11,13 @@ Only one command per comment and the command must be in its own line.
 - !book Name of book
 - !author Author of book
 
+## Supported subreddits
+
+- /r/testingground4bots
+- /r/chess
+- /r/python
+- /r/learnprogramming
+
 ## Installation
 
 If you want to run an instance of this bot:
