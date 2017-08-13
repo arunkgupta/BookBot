@@ -28,7 +28,8 @@ SQL_ADD_COMMENT = """INSERT INTO comments(comment, created_at) VALUES ('{comment
 BOT = praw.Reddit('bookBot')
 SUBREDDIT_LIST = [
 "testingground4bots",
-"chess"
+"chess",
+"python"
 ]
 SUBREDDIT = BOT.subreddit("+".join(SUBREDDIT_LIST))
 NUMBER_OF_POSTS = 100
