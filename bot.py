@@ -1,19 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sqlite3
-import praw
-import BeautifulSoup
-import requests
-import re
-
+from sqlite3 import connect
+from re import sub
 from datetime import datetime
+
+from praw import Reddit
+from bs4 import BeautifulSoup
+from requests import get
 
 DEBUG="TRUE"
 
 #sqlite3
-CONN = sqlite3.connect("bookbot.db")
+CONN = connect("bookbot.db")
 CURSOR = CONN.cursor()
+
 SQL_CREATE_TABLE = """
 CREATE TABLE IF NOT EXISTS comments (
     id integer PRIMARY KEY,
@@ -25,7 +26,7 @@ SQL_SEARCH = """SELECT * FROM comments WHERE comment='{comment_perm}'"""
 SQL_ADD_COMMENT = """INSERT INTO comments(comment, created_at) VALUES ('{comment_perm}', '{now}')"""
 
 # Reddit params
-BOT = praw.Reddit('bookBot')
+BOT = Reddit('bookBot')
 SUBREDDIT_LIST = [
 "testingground4bots",
 "chess",
@@ -70,9 +71,9 @@ def get_search_string(comment):
 
 def get_book_info(search_string, n):
     # parses goodread for info about books
-    request_text = requests.get(SEARCH_URL + search_string).text
+    request_text = get(SEARCH_URL + search_string).text
     if '<h3 class="searchSubNavContainer">No results.</h3>' not in request_text:
-        soup = BeautifulSoup.BeautifulSoup(request_text)
+        soup = BeautifulSoup(request_text, "html.parser")
         books_content = []
         for book_content in soup.findAll("tr"):
             if book_content["itemtype"] == "http://schema.org/Book":
@@ -89,10 +90,10 @@ def get_book_info(search_string, n):
             books_info[-1]["link"] = "https://www.goodreads.com" + book_content.find("a")["href"] +"&ac=1"
 
         if n == 1:
-            request_text = requests.get(books_info[-1]["link"]).text
-            soup = BeautifulSoup.BeautifulSoup(request_text)
+            request_text = get(books_info[-1]["link"]).text
+            soup = BeautifulSoup(request_text, "html.parser")
             book_html = soup.find("div", {"id":"description"}).findAll("span")[-1].text
-            re.sub('<[^<]+?>', '', book_html.encode("utf-8"))
+            sub('<[^<]+?>', '', book_html)
             books_info[0]["description"] = book_html
 
         return(books_info)
@@ -104,13 +105,13 @@ def build_reply_string(books):
     for i, book in enumerate(books):
         reply_text += TEMPLATE_BOOK.format(
             number=i+1,
-            title=book["title"].encode("utf-8"),
-            author=book["author"].encode("utf-8"),
-            rating=book["rating"].encode("utf-8"),
-            link=book["link"].encode("utf-8")
+            title=book["title"],
+            author=book["author"],
+            rating=book["rating"],
+            link=book["link"]
         )
     if len(books) == 1:
-        reply_text += "\n\n>{}\n\n".format(books[0]["description"].encode("utf-8"))
+        reply_text += "\n\n>{}\n\n".format(books[0]["description"])
     reply_text += SIGNATURE
     return(reply_text)
 
