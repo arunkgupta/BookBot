@@ -9,7 +9,8 @@ from praw import Reddit
 from bs4 import BeautifulSoup
 from requests import get
 
-DEBUG="TRUE"
+DEBUG = True
+TEST = False
 
 #sqlite3
 CONN = connect("bookbot.db")
@@ -32,8 +33,14 @@ SUBREDDIT_LIST = [
 "testingground4bots",
 "chess",
 "python",
-"learnprogramming"
+"learnprogramming",
+"programming"
 ]
+
+if TEST:
+    SUBREDDIT_LIST = [
+    "testingground4bots"
+    ]
 SUBREDDIT = BOT.subreddit("+".join(SUBREDDIT_LIST))
 NUMBER_OF_POSTS = 100
 CALLSIGN = "!book"
