@@ -28,11 +28,15 @@ SQL_ADD_COMMENT = """INSERT INTO comments(comment, created_at) VALUES ('{comment
 # Reddit params
 BOT = Reddit('bookBot')
 SUBREDDIT_LIST = [
+"testingground4bots"
+]
+"""
+SUBREDDIT_LIST = [
 "testingground4bots",
 "chess",
 "python",
 "learnprogramming"
-]
+]"""
 SUBREDDIT = BOT.subreddit("+".join(SUBREDDIT_LIST))
 NUMBER_OF_POSTS = 100
 CALLSIGN = "!book"
@@ -93,9 +97,11 @@ def get_book_info(search_string, n):
         if n == 1:
             request_text = get(books_info[-1]["link"]).text
             soup = BeautifulSoup(request_text, "html.parser")
-            book_html = soup.find("div", {"id":"description"}).findAll("span")[-1].text
-            sub('<[^<]+?>', '', book_html)
-            books_info[0]["description"] = book_html
+            soup = soup.find("div", {"id":"description"})
+            if soup:
+                book_html = soup.findAll("span")[-1].text
+                sub('<[^<]+?>', '', book_html)
+                books_info[0]["description"] = book_html
 
         return(books_info)
     else:
@@ -111,7 +117,7 @@ def build_reply_string(books):
             rating=book["rating"],
             link=book["link"]
         )
-    if len(books) == 1:
+    if "description" in books[0].keys():
         reply_text += "\n\n>{}\n\n".format(books[0]["description"])
     reply_text += SIGNATURE
     return(reply_text)
