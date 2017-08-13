@@ -138,8 +138,7 @@ def main():
     CURSOR.execute(SQL_CREATE_TABLE)
     # Parses SUBREDDIT to get comments in whichCALLSIGN is used
     for comment in SUBREDDIT.comments(limit=NUMBER_OF_POSTS):
-        if (CALLSIGN in comment.body.lower()
-            or AUTHOR_CALLSIGN in comment.body.lower()):
+        if (CALLSIGN in comment.body.lower() or AUTHOR_CALLSIGN in comment.body.lower()):
             search_string, filt = get_search_string(comment)
 
             # checks if already replied to this comment
@@ -162,12 +161,12 @@ def main():
             # replies
             reply_string = build_reply_string(book_info)
             comment.reply(reply_string)
+            # saves to DB
+            CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink(), now=datetime.now()))
+            CONN.commit()
             if DEBUG:
                 print("reply: \n{}".format(reply_string))
 
-            # saves to DB
-            CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink(), now=datetime.now()))
-    CONN.commit()
     CONN.close()
 
 
