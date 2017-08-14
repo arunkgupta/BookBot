@@ -19,12 +19,12 @@ CURSOR = CONN.cursor()
 SQL_CREATE_TABLE = """
 CREATE TABLE IF NOT EXISTS comments (
     id integer PRIMARY KEY,
-    comment text NOT NULL,
+    subreddit text NOT NULL,
     created_at TIMESTAMP
 );
 """
-SQL_SEARCH = """SELECT * FROM comments WHERE comment='{comment_perm}'"""
-SQL_ADD_COMMENT = """INSERT INTO comments(comment, created_at) VALUES ('{comment_perm}', '{now}')"""
+SQL_SEARCH = """SELECT * FROM comments WHERE id='{id}'"""
+SQL_ADD_COMMENT = """INSERT INTO comments(id, subreddit, created_at) VALUES ('{id}', '{comment_perm}', '{now}')"""
 
 # Reddit params
 BOT = praw.Reddit('bookBot')
@@ -175,10 +175,10 @@ def main():
 
     CONN.close()
 """
-def test():
+def main():
     CURSOR.execute(SQL_CREATE_TABLE)
     get_comments_book()
 
 
 if __name__ == "__main__":
-    test()
+    main()
