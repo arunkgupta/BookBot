@@ -60,7 +60,6 @@ TEMPLATE_AUTHOR = """
 SIGNATURE = """
 ***
 ^^I'm ^^a ^^bot, ^^check ^^me ^^out ^^at: ^^https://github.com/RoberTnf/BookBot
-^^Created ^^by ^^/u/AgressiveYorkshire.
 """
 
 # goodreads params
