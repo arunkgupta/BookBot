@@ -252,13 +252,13 @@ def reply(comments, reply_strings, table):
 def main():
 
     # books
-    """table="books"
+    table="books"
     CURSOR.execute(SQL_CREATE_TABLE.format(tablename=table))
     comments = get_comments(BOOK_CALLSIGN, table)
     search_strings = get_search_strings(comments, BOOK_CALLSIGN)
     books_info = get_books_info(search_strings)
     reply_strings = get_reply_strings_book(books_info)
-    reply(comments, reply_strings, table)"""
+    reply(comments, reply_strings, table)
 
     #authors
     table = "authors"
