@@ -107,11 +107,11 @@ def get_books_info(search_strings):
                 soup = soup.find("div", {"id":"description"})
                 # check that the description exists
                 if soup:
-                    description_html = string(soup.findAll("span")[-1])
+                    description_html = str(soup.findAll("span")[-1])
                     # format description
                     # line breaks
                     description_html = description_html.replace('\n', "")
-                    description_html = description_html.replace("<br/>", "\n\n")
+                    description_html = description_html.replace("<br/>", "\n\n>")
                     # bold
                     description_html = description_html.replace("<b>", "**")
                     description_html = description_html.replace("</b>", "**")
@@ -152,7 +152,7 @@ def get_authors_info(search_strings):
             # format description
             # line breaks
             description_html = description_html.replace('\n', "")
-            description_html = description_html.replace("<br/>", "\n\n")
+            description_html = description_html.replace("<br/>", "\n\n>")
             # bold
             description_html = description_html.replace("<b>", "**")
             description_html = description_html.replace("</b>", "**")
