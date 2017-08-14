@@ -5,7 +5,7 @@ from sqlite3 import connect
 from re import sub
 from datetime import datetime
 
-from praw import Reddit
+import praw
 from bs4 import BeautifulSoup
 from requests import get
 
@@ -27,7 +27,7 @@ SQL_SEARCH = """SELECT * FROM comments WHERE comment='{comment_perm}'"""
 SQL_ADD_COMMENT = """INSERT INTO comments(comment, created_at) VALUES ('{comment_perm}', '{now}')"""
 
 # Reddit params
-BOT = Reddit('bookBot')
+BOT = praw.Reddit('bookBot')
 
 SUBREDDIT_LIST = [
 "testingground4bots",
@@ -43,7 +43,7 @@ if TEST:
     ]
 SUBREDDIT = BOT.subreddit("+".join(SUBREDDIT_LIST))
 NUMBER_OF_POSTS = 100
-CALLSIGN = "!book"
+CALLSIGN = "!getbook"
 AUTHOR_CALLSIGN = "!author"
 
 # comment templates
@@ -131,44 +131,54 @@ def was_replied(comment):
     rows = CURSOR.execute(SQL_SEARCH.format(comment_perm=comment.permalink()))
     return bool(rows.fetchall())
 
+def get_comments_book():
+    # grab the request
+    request = get('https://api.pushshift.io/reddit/search?q=%22getBook%22&limit=100',
+        headers = {'User-Agent': 'BookBot-Agent'})
+    json = request.json()
+    raw_comments = json["data"]
+    comments = []
 
+    for rawcomment in raw_comments:
+        # object constructor requires empty attribute
+        rawcomment['_replies'] = ''
+        if CALLSIGN in rawcomment["body"].lower():
+            comments.append(praw.models.Comment(BOT, _data=rawcomment))
+
+    return(comments)
+
+
+"""
 def main():
-
-    print(str(datetime.now()))
     CURSOR.execute(SQL_CREATE_TABLE)
     # Parses SUBREDDIT to get comments in whichCALLSIGN is used
-    for comment in SUBREDDIT.comments(limit=NUMBER_OF_POSTS):
-        if (CALLSIGN in comment.body.lower() or AUTHOR_CALLSIGN in comment.body.lower()):
-            search_string, filt = get_search_string(comment)
+    comments = get_comments_book()
+    # gets book info
+    n = NUMBER_OF_BOOKS
+    if filt:
+        n = NUMBER_OF_BOOKS_AUTHOR
+    book_info = get_book_info(search_string, n)
+    if not book_info:
+        if DEBUG:
+            print("No info for {}".format(search_string))
+        CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink(), now=datetime.now()))
 
-            # checks if already replied to this comment
-            if was_replied(comment):
-                if DEBUG:
-                    print("Already replied to {}".format(comment.permalink()))
-                continue
 
-            # gets book info
-            n = NUMBER_OF_BOOKS
-            if filt:
-                n = NUMBER_OF_BOOKS_AUTHOR
-            book_info = get_book_info(search_string, n)
-            if not book_info:
-                if DEBUG:
-                    print("No info for {}".format(search_string))
-                CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink(), now=datetime.now()))
-                continue
-
-            # replies
-            reply_string = build_reply_string(book_info)
-            comment.reply(reply_string)
-            # saves to DB
-            CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink(), now=datetime.now()))
-            CONN.commit()
-            if DEBUG:
-                print("reply: \n{}".format(reply_string))
+    # replies
+    reply_string = build_reply_string(book_info)
+    comment.reply(reply_string)
+    # saves to DB
+    CURSOR.execute(SQL_ADD_COMMENT.format(comment_perm=comment.permalink(), now=datetime.now()))
+    CONN.commit()_list
+    if DEBUG:
+        print("reply: \n{}".format(reply_string))
 
     CONN.close()
+"""
+def test():
+    CURSOR.execute(SQL_CREATE_TABLE)
+    get_comments_book()
 
 
 if __name__ == "__main__":
-    main()
+    test()
