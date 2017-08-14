@@ -158,8 +158,6 @@ def get_authors_info(search_strings):
             description_html = description_html.replace("</b>", "**")
             # remove html
             description_html = sub('<[^<]+?>', '', description_html)
-
-            print(description_html)
             authors_info[-1]["description"] = description_html
 
             # Avoid (books_info[-1]["link"]).text trying to read more books than exist
