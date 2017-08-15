@@ -33,12 +33,20 @@ D_CALLSIGNS = [D_CALLSIGNS_DICT[k] for k in D_CALLSIGNS_DICT]
 
 # discord templates
 D_TEMPLATE_BOOK = """
+{number}. **{title}** by {author}. ({rating}/5 *) (<{link}>)
 
 """
 
+D_TEMPLATE_AUTHOR ="""
+**{name}** (<{link}>)
+
+
+```{description}```
+
+"""
 # reddit comment templates
 TEMPLATE_BOOK = """
-{number}. {title} by {author}. ({rating}/5 *) [Link]({link})
+{number}. **{title}** by {author}. ({rating}/5 *) [Link]({link})
 
 
 >{description}

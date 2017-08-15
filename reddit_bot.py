@@ -71,6 +71,18 @@ def get_reply_strings_author(books_info, authors_info):
     for author_info, book_info in zip(authors_info, books_info):
         reply_text = ""
         if author_info:
+            if "description" in author_info.keys():
+                # format description
+                # line breaks
+                author_info["description"] = author_info["description"].replace('\n', "")
+                author_info["description"] = author_info["description"].replace("<br/>", "\n\n>")
+                # bold
+                author_info["description"] = author_info["description"].replace("<b>", "**")
+                author_info["description"] = author_info["description"].replace("</b>", "**")
+                # remove html
+                author_info["description"] = sub('<[^<]+?>', '', author_info["description"])
+            else:
+                author_info["description"] = "No description."
             reply_text += TEMPLATE_AUTHOR.format(
                 name=author_info["author"],
                 link=author_info["link"],
@@ -79,28 +91,16 @@ def get_reply_strings_author(books_info, authors_info):
 
             if book_info:
                 for i, book in enumerate(book_info):
-                    if "description" in book.keys():
-                        # format description
-                        # line breaks
-                        book["description"] = book["description"].replace('\n', "")
-                        book["description"] = book["description"].replace("<br/>", "\n\n>")
-                        # bold
-                        book["description"] = book["description"].replace("<b>", "**")
-                        book["description"] = book["description"].replace("</b>", "**")
-                        # remove html
-                        book["description"] = sub('<[^<]+?>', '', book["description"])
-                    else:
-                        book["description"] = "No description."
                     reply_text += TEMPLATE_BOOK.format(
                         number=i+1,
                         title=book["title"],
                         author=book["author"],
                         rating=book["rating"],
                         link=book["link"],
-                        description=book["description"]
+                        description=""
                     )
         else:
-            reply_text += "No results found"
+            reply_text += "No results found."
 
         reply_text += SIGNATURE
         reply_texts.append(reply_text)
@@ -148,7 +148,7 @@ def reply(comments, reply_strings, table):
 def main():
 
     # books
-    table="books"
+    """table="books"
     CURSOR.execute(SQL_CREATE_TABLE_REDDIT.format(tablename=table))
     comments = get_comments(BOOK_CALLSIGN, table)
     search_strings = get_search_strings(comments, BOOK_CALLSIGN)
@@ -157,7 +157,7 @@ def main():
     if not TEST:
         reply(comments, reply_strings, table)
     else:
-        print(reply_strings)
+        print(reply_strings)"""
 
     #authors
     table = "authors"

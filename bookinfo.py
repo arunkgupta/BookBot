@@ -34,7 +34,7 @@ def get_books_info(search_strings):
                     description_html = str(soup.findAll("span")[-1])
                     book_info[-1]["description"] = description_html
                 else:
-                    book_info[-1]["description"] = "No description found"
+                    book_info[-1]["description"] = "No description found."
             books_info.append(book_info)
         else:
             books_info.append(False)
