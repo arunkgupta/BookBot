@@ -29,3 +29,7 @@ If you want to run an instance of this bot:
 4. python reddit_bot.py o python discord_bot.py
 
 ## TODO
+
+1. Comment the code more
+2. Fix and clean the code
+3. Add a DB for discord bot
