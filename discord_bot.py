@@ -19,6 +19,14 @@ logger.addHandler(handler)
 client = discord.Client()
 
 def get_reply_strings_book(books_info):
+    """
+    Formats the reply message for discord.
+
+    Input:
+     - books_info list with dictionaries with information about each book
+    Output:
+     - reply_texts list with strings containing formatted replies"""
+
     reply_texts = []
     for book_info in books_info:
         reply_text = ""
@@ -50,6 +58,15 @@ def get_reply_strings_book(books_info):
     return(reply_texts)
 
 def get_reply_strings_author(books_info, authors_info):
+    """
+    Formats the reply message for discord.
+
+    Input:
+     - books_info list with dictionaries with information about each book
+     - authors_info same with autors information
+    Output:
+     - reply_texts list with strings containing formatted replies"""
+
     reply_texts = []
     for author_info, book_info in zip(authors_info, books_info):
         reply_text = ""
