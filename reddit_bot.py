@@ -148,7 +148,7 @@ def reply(comments, reply_strings, table):
 def main():
 
     # books
-    """table="books"
+    table="books"
     CURSOR.execute(SQL_CREATE_TABLE_REDDIT.format(tablename=table))
     comments = get_comments(BOOK_CALLSIGN, table)
     search_strings = get_search_strings(comments, BOOK_CALLSIGN)
@@ -157,7 +157,7 @@ def main():
     if not TEST:
         reply(comments, reply_strings, table)
     else:
-        print(reply_strings)"""
+        print(reply_strings)
 
     #authors
     table = "authors"
