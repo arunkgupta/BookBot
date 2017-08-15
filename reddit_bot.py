@@ -6,15 +6,17 @@ Reddit bot runner and specific functions.
 """
 from datetime import datetime
 
-import praw
+from praw import Reddit
+from praw.models import Comment
 from requests import get
 
 from config import TEMPLATE_BOOK, TEMPLATE_AUTHOR, SIGNATURE, CURSOR,\
-    SQL_SEARCH, BOT, DEBUG, TEST, SQL_ADD_COMMENT, CONN,\
+    SQL_SEARCH, DEBUG, TEST, SQL_ADD_COMMENT, CONN,\
     SQL_CREATE_TABLE_REDDIT, BOOK_CALLSIGN, AUTHOR_CALLSIGN
 
 from bookinfo import get_books_info, get_authors_info
 
+BOT = Reddit('bookBot')
 
 def get_search_strings(comments, callsign):
     """
@@ -98,7 +100,7 @@ def get_comments(callsign, table):
         # object constructor requires empty attribute
         rawcomment['_replies'] = ''
         if callsign in rawcomment["body"].lower():
-            comment = praw.models.Comment(BOT, _data=rawcomment)
+            comment = Comment(BOT, _data=rawcomment)
             if not was_replied(comment, table):
                 comments.append(comment)
 

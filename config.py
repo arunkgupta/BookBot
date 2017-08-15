@@ -1,5 +1,6 @@
-"""Constants, SQL and PRAW connectors"""
+"""Constants, SQL connectors"""
 
+from os import environ
 from sqlite3 import connect
 from praw import Reddit
 
@@ -21,11 +22,13 @@ SQL_SEARCH = """SELECT * FROM {tablename} WHERE id='{id}'"""
 SQL_ADD_COMMENT = """INSERT INTO {tablename} (id, subreddit, created_at) VALUES ('{id}', '{subreddit}', '{now}')"""
 
 # Reddit params
-BOT = Reddit('bookBot')
-
 NUMBER_OF_POSTS = 100
-BOOK_CALLSIGN = "!getbook"
-AUTHOR_CALLSIGN = "!getauthor"
+BOOK_CALLSIGN = "!getbook "
+AUTHOR_CALLSIGN = "!getauthor "
+
+# discord
+BOT_TOKEN = environ["DISCORD_BOT"]
+D_CALLSIGNS = {"book": "!book ", "author": "!author ", "help": "!book help"}
 
 # comment templates
 TEMPLATE_BOOK = """
