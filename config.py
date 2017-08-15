@@ -44,6 +44,14 @@ D_TEMPLATE_AUTHOR ="""
 ```{description}```
 
 """
+
+D_TEMPLATE_HELP ="""
+Usage:
+- !book Name of book
+- !author Author of book
+
+More at: <https://github.com/RoberTnf/BookBot>
+"""
 # reddit comment templates
 TEMPLATE_BOOK = """
 {number}. **{title}** by {author}. ({rating}/5 *) [Link]({link})

@@ -5,7 +5,7 @@ import discord
 from re import sub
 
 from config import BOT_TOKEN, D_CALLSIGNS, D_CALLSIGNS_DICT, DEBUG,\
-    D_TEMPLATE_BOOK, D_TEMPLATE_AUTHOR
+    D_TEMPLATE_BOOK, D_TEMPLATE_HELP, D_TEMPLATE_AUTHOR
 from bookinfo import get_books_info, get_authors_info
 
 # logging set up
@@ -17,36 +17,6 @@ logger.addHandler(handler)
 
 # init client
 client = discord.Client()
-
-@client.event
-async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
-
-@client.event
-async def on_message(message):
-    # check it is a message to us
-    command, search_string = message.content.lower().split(" ", 1)
-    if command in D_CALLSIGNS:
-        if command == D_CALLSIGNS_DICT["book"]:
-            if DEBUG:
-                print("Looking for book: {}".format(search_string))
-            books_info = get_books_info((search_string, ))
-            reply_string = get_reply_strings_book(books_info)[0]
-            await client.send_message(message.channel, reply_string)
-            if DEBUG:
-                print("Sent message")
-
-        if command == D_CALLSIGNS_DICT["author"]:
-            if DEBUG:
-                print("Looking for author: {}".format(search_string))
-            books_info, authors_info = get_authors_info((search_string, ))
-            reply_string = get_reply_strings_author(books_info, authors_info)[0]
-            await client.send_message(message.channel, reply_string)
-            if DEBUG:
-                print("Sent message")
 
 def get_reply_strings_book(books_info):
     reply_texts = []
@@ -116,5 +86,39 @@ def get_reply_strings_author(books_info, authors_info):
             reply_text = reply_text[:1990] + "```"
         reply_texts.append(reply_text)
     return(reply_texts)
+
+@client.event
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+
+@client.event
+async def on_message(message):
+    # check it is a message to us
+    command, search_string = message.content.lower().split(" ", 1)
+    if command in D_CALLSIGNS:
+        if search_string == "help":
+            await client.send_message(message.channel, D_TEMPLATE_HELP)
+
+        elif command == D_CALLSIGNS_DICT["book"]:
+            if DEBUG:
+                print("Looking for book: {}".format(search_string))
+            books_info = get_books_info((search_string, ))
+            reply_string = get_reply_strings_book(books_info)[0]
+            await client.send_message(message.channel, reply_string)
+            if DEBUG:
+                print("Sent message")
+
+        elif command == D_CALLSIGNS_DICT["author"]:
+            if DEBUG:
+                print("Looking for author: {}".format(search_string))
+            books_info, authors_info = get_authors_info((search_string, ))
+            reply_string = get_reply_strings_author(books_info, authors_info)[0]
+            await client.send_message(message.channel, reply_string)
+            if DEBUG:
+                print("Sent message")
+
 
 client.run(BOT_TOKEN)
