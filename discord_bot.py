@@ -97,7 +97,10 @@ async def on_ready():
 @client.event
 async def on_message(message):
     # check it is a message to us
-    command, search_string = message.content.lower().split(" ", 1)
+    if len(message.content.lower().split(" ", 1)) > 1:
+        command, search_string = message.content.lower().split(" ", 1)
+    else:
+        command, search_string = ["",""]
     if command in D_CALLSIGNS:
         if search_string == "help":
             await client.send_message(message.channel, D_TEMPLATE_HELP)

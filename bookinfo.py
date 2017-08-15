@@ -64,7 +64,13 @@ def get_authors_info(search_strings):
             authors_info[-1]["author"] = soup.find("a", {"class":"authorName"}).span.text
             # get description
             description_id = "freeTextauthor"+authors_info[-1]["link"].split("/")[-1].split(".")[0]
-            description_html = str(soup.find("span", id=description_id))
+            description_html = soup.find("span", id=description_id)
+            if not description_html:
+                description_id = "freeTextContainerauthor"+authors_info[-1]["link"].split("/")[-1].split(".")[0]
+                description_html = soup.find("span", id=description_id)
+            if not description_html:
+                description_html = "No biography."
+            description_html = str(description_html)
             authors_info[-1]["description"] = description_html
 
             # Avoid (books_info[-1]["link"]).text trying to read more books than exist
