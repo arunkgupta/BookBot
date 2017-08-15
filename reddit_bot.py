@@ -1,5 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 """
 Reddit bot runner and specific functions.
@@ -9,6 +8,7 @@ from datetime import datetime
 from praw import Reddit
 from praw.models import Comment
 from requests import get
+from re import sub
 
 from config import TEMPLATE_BOOK, TEMPLATE_AUTHOR, SIGNATURE, CURSOR,\
     SQL_SEARCH, DEBUG, TEST, SQL_ADD_COMMENT, CONN,\
@@ -40,17 +40,26 @@ def get_reply_strings_book(books_info):
         reply_text = ""
         if book_info:
             for i, book in enumerate(book_info):
+                if "description" in book.keys():
+                    # format description
+                    # line breaks
+                    book["description"] = book["description"].replace('\n', "")
+                    book["description"] = book["description"].replace("<br/>", "\n\n>")
+                    # bold
+                    book["description"] = book["description"].replace("<b>", "**")
+                    book["description"] = book["description"].replace("</b>", "**")
+                    # remove html
+                    book["description"] = sub('<[^<]+?>', '', book["description"])
+                else:
+                    book["description"] = "No description."
                 reply_text += TEMPLATE_BOOK.format(
                     number=i+1,
                     title=book["title"],
                     author=book["author"],
                     rating=book["rating"],
-                    link=book["link"]
+                    link=book["link"],
+                    description=book["description"]
                 )
-            if "description" in book_info[0].keys():
-                reply_text += "\n\n>{}\n\n".format(book_info[0]["description"])
-            else:
-                reply_text += "\n\n>No description Foud\n\n"
         else:
             reply_text += "No results found."
         reply_text += SIGNATURE
@@ -67,19 +76,32 @@ def get_reply_strings_author(books_info, authors_info):
                 link=author_info["link"],
                 description=author_info["description"]
             )
-        if book_info:
-            for i, book in enumerate(book_info):
-                reply_text += TEMPLATE_BOOK.format(
-                    number=i+1,
-                    title=book["title"],
-                    author=book["author"],
-                    rating=book["rating"],
-                    link=book["link"]
-                )
-            if "description" in book_info[0].keys():
-                reply_text += "\n\n>{}\n\n".format(book_info[0]["description"])
+
+            if book_info:
+                for i, book in enumerate(book_info):
+                    if "description" in book.keys():
+                        # format description
+                        # line breaks
+                        book["description"] = book["description"].replace('\n', "")
+                        book["description"] = book["description"].replace("<br/>", "\n\n>")
+                        # bold
+                        book["description"] = book["description"].replace("<b>", "**")
+                        book["description"] = book["description"].replace("</b>", "**")
+                        # remove html
+                        book["description"] = sub('<[^<]+?>', '', book["description"])
+                    else:
+                        book["description"] = "No description."
+                    reply_text += TEMPLATE_BOOK.format(
+                        number=i+1,
+                        title=book["title"],
+                        author=book["author"],
+                        rating=book["rating"],
+                        link=book["link"],
+                        description=book["description"]
+                    )
         else:
-            reply_text += "No results found."
+            reply_text += "No results found"
+
         reply_text += SIGNATURE
         reply_texts.append(reply_text)
     return(reply_texts)
@@ -134,6 +156,8 @@ def main():
     reply_strings = get_reply_strings_book(books_info)
     if not TEST:
         reply(comments, reply_strings, table)
+    else:
+        print(reply_strings)
 
     #authors
     table = "authors"
@@ -144,6 +168,8 @@ def main():
     reply_strings = get_reply_strings_author(books_info, authors_info)
     if not  TEST:
         reply(comments, reply_strings, table)
+    else:
+        print(reply_strings)
     CONN.close()
 
 

@@ -28,11 +28,20 @@ AUTHOR_CALLSIGN = "!getauthor "
 
 # discord
 BOT_TOKEN = environ["DISCORD_BOT"]
-D_CALLSIGNS = {"book": "!book ", "author": "!author ", "help": "!book help"}
+D_CALLSIGNS_DICT = {"book": "!book", "author": "!author"}
+D_CALLSIGNS = [D_CALLSIGNS_DICT[k] for k in D_CALLSIGNS_DICT]
 
-# comment templates
+# discord templates
+D_TEMPLATE_BOOK = """
+
+"""
+
+# reddit comment templates
 TEMPLATE_BOOK = """
 {number}. {title} by {author}. ({rating}/5 *) [Link]({link})
+
+
+>{description}
 """
 TEMPLATE_AUTHOR = """
 [{name}]({link})

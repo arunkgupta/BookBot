@@ -32,17 +32,9 @@ def get_books_info(search_strings):
                 # check that the description exists
                 if soup:
                     description_html = str(soup.findAll("span")[-1])
-                    # format description
-                    # line breaks
-                    description_html = description_html.replace('\n', "")
-                    description_html = description_html.replace("<br/>", "\n\n>")
-                    # bold
-                    description_html = description_html.replace("<b>", "**")
-                    description_html = description_html.replace("</b>", "**")
-                    # remove html
-                    description_html = sub('<[^<]+?>', '', description_html)
-                    print(description_html)
                     book_info[-1]["description"] = description_html
+                else:
+                    book_info[-1]["description"] = "No description found"
             books_info.append(book_info)
         else:
             books_info.append(False)
@@ -73,15 +65,6 @@ def get_authors_info(search_strings):
             # get description
             description_id = "freeTextauthor"+authors_info[-1]["link"].split("/")[-1].split(".")[0]
             description_html = str(soup.find("span", id=description_id))
-            # format description
-            # line breaks
-            description_html = description_html.replace('\n', "")
-            description_html = description_html.replace("<br/>", "\n\n>")
-            # bold
-            description_html = description_html.replace("<b>", "**")
-            description_html = description_html.replace("</b>", "**")
-            # remove html
-            description_html = sub('<[^<]+?>', '', description_html)
             authors_info[-1]["description"] = description_html
 
             # Avoid (books_info[-1]["link"]).text trying to read more books than exist
